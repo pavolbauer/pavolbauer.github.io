@@ -137,6 +137,14 @@
   }
   .card:hover{transform:translateY(-3px);border-color:var(--wire-lit);
     box-shadow:0 14px 40px -18px rgba(0,0,0,.8)}
+  .card .thumb{margin:-22px -22px 4px;height:132px;overflow:hidden;
+    border-bottom:1px solid var(--wire);background:#160023;
+    display:flex;align-items:center;justify-content:center}
+  .card .thumb img,.card .thumb svg{display:block;width:100%;height:100%;object-fit:cover}
+  .card .thumb.fig{background:#f4f1ea;padding:8px}
+  .card .thumb.fig img{object-fit:contain}
+  .card:hover .thumb img,.card:hover .thumb svg{transform:scale(1.03)}
+  .card .thumb img,.card .thumb svg{transition:transform .3s ease}
   .card .row1{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
   .card h3{font-size:19px;font-weight:700;letter-spacing:-.2px;color:var(--cream)}
   .card .stars{font-size:12.5px;font-weight:700;color:var(--fire);white-space:nowrap;
@@ -248,6 +256,7 @@
 
     <div class="grid proj">
       <a class="card reveal" href="https://github.com/LINCellularNeuroscience/VAME" target="_blank" rel="noopener">
+        <div class="thumb fig"><img src="assets/vame.png" alt="VAME workflow: pose estimation, egocentric alignment, variational RNN, motif inference" loading="lazy"></div>
         <div class="row1"><h3>VAME</h3><span class="stars">★ 201</span></div>
         <p>Variational Animal Motion Embedding — a toolbox for embedding and
            clustering animal-behavior time series into discrete motifs.</p>
@@ -256,6 +265,7 @@
       </a>
 
       <a class="card reveal" href="https://github.com/URDME/urdme" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-urdme.svg" alt="Unstructured triangular mesh with a diffusion front" loading="lazy"></div>
         <div class="row1"><h3>URDME</h3><span class="stars">★ 30</span></div>
         <p>Stochastic reaction–diffusion simulation on unstructured meshes — a
            framework for spatial stochastic modeling in systems biology.</p>
@@ -264,6 +274,7 @@
       </a>
 
       <a class="card reveal" href="https://github.com/pavolbauer/nsga2" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-nsga2.svg" alt="Pareto front of a multi-objective optimization" loading="lazy"></div>
         <div class="row1"><h3>nsga2</h3><span class="stars">★ 3</span></div>
         <p>A clean implementation of the Non-dominated Sorting Genetic Algorithm II
            (NSGA-II) for multi-objective optimization.</p>
@@ -272,6 +283,7 @@
       </a>
 
       <a class="card reveal" href="https://github.com/pavolbauer/ix_kubeflow_tutorial" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-kubeflow.svg" alt="Machine-learning pipeline as a directed graph of steps" loading="lazy"></div>
         <div class="row1"><h3>ix_kubeflow_tutorial</h3></div>
         <p>Companion code for my iX magazine tutorial on Kubeflow — building
            reproducible ML pipelines on Kubernetes.</p>
@@ -280,6 +292,7 @@
       </a>
 
       <a class="card reveal" href="https://github.com/pavolbauer/lgca" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-lgca.svg" alt="Lattice gas cellular automaton grid with flow directions" loading="lazy"></div>
         <div class="row1"><h3>lgca</h3><span class="stars">★ 1</span></div>
         <p>A MATLAB/CUDA simulation of infectious contacts using a Lattice Gas
            Cellular Automaton — epidemiology on the GPU.</p>
@@ -288,6 +301,7 @@
       </a>
 
       <a class="card reveal" href="https://github.com/pavolbauer" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-github.svg" alt="GitHub contribution grid" loading="lazy"></div>
         <div class="row1"><h3>More on GitHub</h3></div>
         <p>29 repositories in total — plus a few Arctic Code Vault contributions.
            Come dig around.</p>
@@ -306,6 +320,7 @@
 
     <div class="grid play">
       <a class="card pedal reveal" href="https://pavolbauer.github.io/air-hendrix/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-airhendrix.svg" alt="Glowing neon equalizer bars" loading="lazy"></div>
         <span class="badge">🔴 Live demo</span>
         <div class="row1"><h3><span class="emoji">🎸</span>&nbsp; Air Hendrix</h3></div>
         <p>Point your camera, play air guitar for real. Hand-tracking maps every move
@@ -316,6 +331,7 @@
       </a>
 
       <a class="card pedal reveal" href="https://pavolbauer.github.io/city-explorer-game/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="assets/thumb-cityexplorer.svg" alt="Stylized globe with location pins" loading="lazy"></div>
         <span class="badge">🎓 Educational</span>
         <div class="row1"><h3><span class="emoji">🌍</span>&nbsp; City Explorer</h3></div>
         <p>A geography quiz for 1–4 players: find cities on the map and get scored by
