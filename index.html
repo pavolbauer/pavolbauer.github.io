@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pavol Bauer — play the sky</title>
+<meta name="description" content="Pavol Bauer — Principal Data Scientist in Vienna. Time-series, stochastic simulation, and gesture-controlled guitars.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#120018;        /* stage-dark purple */
+    --ink2:#1c0a2b;       /* raised panel */
+    --haze:#c084fc;       /* purple haze */
+    --haze-dim:#8b5cd6;
+    --fire:#ff6d1f;       /* burning amp orange */
+    --cream:#ffeed6;      /* old poster cream */
+    --cream-dim:#c9b8a6;
+    --wire:#3d2554;       /* dim violet lines */
+    --wire-lit:#5a3a7a;
+    --maxw:1080px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);color:var(--cream);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    line-height:1.6;overflow-x:hidden;position:relative;
+  }
+  /* ambient stage haze */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(60% 50% at 18% 12%, rgba(192,132,252,.22), transparent 60%),
+      radial-gradient(55% 45% at 88% 8%, rgba(255,109,31,.15), transparent 55%),
+      radial-gradient(70% 60% at 50% 108%, #2a0e42 0%, var(--ink) 60%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(rgba(61,37,84,.20) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(61,37,84,.20) 1px,transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 85%);
+    -webkit-mask-image:radial-gradient(80% 60% at 50% 30%,#000,transparent 85%);
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--fire);color:var(--ink)}
+
+  /* ---------- top HUD bar ---------- */
+  header{
+    position:sticky;top:0;z-index:20;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px clamp(16px,4vw,40px);
+    background:rgba(18,0,24,.72);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--wire);
+  }
+  .brand{
+    font-family:'Monoton',cursive;font-size:15px;letter-spacing:2px;
+    color:var(--haze);text-shadow:0 0 14px rgba(192,132,252,.7);
+  }
+  nav{display:flex;gap:6px;flex-wrap:wrap}
+  nav a{
+    font-size:12px;font-weight:500;letter-spacing:1px;text-transform:uppercase;
+    color:var(--cream-dim);border:1px solid transparent;border-radius:999px;
+    padding:6px 12px;transition:.18s;
+  }
+  nav a:hover{color:var(--fire);border-color:var(--wire-lit);
+    box-shadow:0 0 14px rgba(255,109,31,.25) inset}
+
+  /* ---------- layout ---------- */
+  main{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+  section{padding:clamp(56px,9vw,110px) 0;position:relative}
+  .eyebrow{
+    font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+    color:var(--fire);display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--fire);
+    box-shadow:0 0 8px var(--fire)}
+  h2.title{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(26px,4.4vw,42px);line-height:1.1;text-wrap:balance;
+    letter-spacing:-.5px;margin-bottom:14px;
+  }
+  .lede{max-width:60ch;color:var(--cream-dim);font-size:clamp(15px,1.6vw,17px)}
+
+  /* ---------- hero ---------- */
+  .hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+    padding-top:40px;padding-bottom:60px}
+  .hero .tag{font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;
+    color:var(--haze);margin-bottom:22px}
+  .hero h1{
+    font-family:'Monoton',cursive;font-weight:400;
+    font-size:clamp(48px,13vw,132px);line-height:.98;letter-spacing:1px;
+    color:var(--haze);text-shadow:0 0 34px rgba(192,132,252,.55);
+  }
+  .hero h1 .fire{color:var(--fire);text-shadow:0 0 34px rgba(255,109,31,.6)}
+  .hero .sub{
+    margin-top:30px;max-width:56ch;font-size:clamp(16px,2vw,20px);
+    color:var(--cream);line-height:1.55;
+  }
+  .hero .sub b{color:var(--fire);font-weight:700}
+  .prev{color:var(--cream-dim);font-size:14px;margin-top:16px;max-width:60ch}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:14px;
+    letter-spacing:.5px;padding:13px 24px;border-radius:999px;cursor:pointer;
+    transition:transform .12s,box-shadow .18s,background .18s;
+  }
+  .btn-fire{background:var(--fire);color:var(--ink);
+    box-shadow:0 0 0 2px var(--ink),0 0 26px rgba(255,109,31,.5)}
+  .btn-fire:hover{transform:translateY(-2px);box-shadow:0 0 0 2px var(--ink),0 0 40px rgba(255,109,31,.75)}
+  .btn-ghost{border:1.5px solid var(--wire-lit);color:var(--cream)}
+  .btn-ghost:hover{border-color:var(--haze);color:var(--haze);
+    box-shadow:0 0 24px rgba(192,132,252,.3)}
+
+  /* ---------- meta strip ---------- */
+  .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
+  .chip{
+    font-size:12.5px;font-weight:500;color:var(--cream);
+    background:rgba(18,0,24,.6);border:1px solid var(--wire);border-radius:999px;
+    padding:8px 15px;display:inline-flex;align-items:center;gap:7px;
+  }
+  .chip b{color:var(--haze);font-weight:700}
+
+  /* ---------- pedal cards ---------- */
+  .grid{display:grid;gap:16px;margin-top:34px}
+  .grid.proj{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .grid.play{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .card{
+    position:relative;display:flex;flex-direction:column;gap:12px;
+    background:linear-gradient(180deg,var(--ink2),rgba(18,0,24,.5));
+    border:1.5px solid var(--wire);border-radius:16px;
+    padding:22px 22px 20px;transition:transform .16s,border-color .18s,box-shadow .2s;
+    overflow:hidden;
+  }
+  .card:hover{transform:translateY(-3px);border-color:var(--wire-lit);
+    box-shadow:0 14px 40px -18px rgba(0,0,0,.8)}
+  .card .row1{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .card h3{font-size:19px;font-weight:700;letter-spacing:-.2px;color:var(--cream)}
+  .card .stars{font-size:12.5px;font-weight:700;color:var(--fire);white-space:nowrap;
+    display:inline-flex;align-items:center;gap:4px}
+  .card p{font-size:14px;color:var(--cream-dim);line-height:1.55;flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+  .tag{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--haze);border:1px solid var(--wire-lit);border-radius:6px;padding:3px 9px}
+  .card .go{font-size:13px;font-weight:700;color:var(--cream-dim);
+    display:inline-flex;align-items:center;gap:6px;transition:.16s}
+  .card:hover .go{color:var(--fire);gap:10px}
+
+  /* playground cards — orange edge glow, live-demo flavour */
+  .card.pedal::before{
+    content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;
+    box-shadow:0 0 0 1.5px transparent inset;transition:.2s;
+  }
+  .card.pedal:hover{border-color:var(--fire)}
+  .card.pedal:hover::before{box-shadow:0 0 26px rgba(255,109,31,.35) inset}
+  .card.pedal .badge{
+    align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--ink);background:var(--fire);
+    border-radius:6px;padding:4px 9px;box-shadow:0 0 16px rgba(255,109,31,.5)}
+  .card.pedal .emoji{font-size:30px;line-height:1}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--wire);margin-top:20px}
+  .foot-in{max-width:var(--maxw);margin:0 auto;padding:40px clamp(16px,4vw,40px);
+    display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+  .foot-links{display:flex;flex-wrap:wrap;gap:8px}
+  .foot-links a{font-size:12.5px;font-weight:600;letter-spacing:.5px;
+    color:var(--cream-dim);border:1px solid var(--wire);border-radius:999px;padding:8px 14px;transition:.16s}
+  .foot-links a:hover{color:var(--haze);border-color:var(--haze)}
+  .foot-note{font-size:12px;color:var(--wire-lit)}
+  .foot-note b{color:var(--haze)}
+
+  /* ---------- motion ---------- */
+  @media (prefers-reduced-motion:no-preference){
+    .hero h1{animation:hum 3.6s ease-in-out infinite}
+    @keyframes hum{0%,100%{text-shadow:0 0 26px rgba(192,132,252,.45)}
+      50%{text-shadow:0 0 52px rgba(192,132,252,.9)}}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.in{opacity:1;transform:none}
+  }
+  :focus-visible{outline:2px solid var(--fire);outline-offset:3px;border-radius:6px}
+
+  @media (max-width:560px){
+    nav{display:none}
+    .hero{min-height:82vh}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="#top">PAVOL<br>BAUER</a>
+  <nav>
+    <a href="#about">CV</a>
+    <a href="#work">Projects</a>
+    <a href="#play">AI Playground</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="tag">Principal Data Scientist · Vienna, Austria</div>
+    <h1>PAVOL<br><span class="fire">BAUER</span></h1>
+    <p class="sub">
+      I turn messy time series into structure — <b>embedding, clustering, and
+      stochastic simulation</b> — by day at Dynatrace, and teach cameras to play
+      guitar by night.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-fire" href="https://www.linkedin.com/in/pavol-bauer/" target="_blank" rel="noopener">🔥 Full CV on LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/pavolbauer" target="_blank" rel="noopener">🎸 GitHub</a>
+    </div>
+    <div class="facts">
+      <span class="chip">📍 <b>Vienna</b>, Austria</span>
+      <span class="chip">🧪 <b>201★</b> on VAME</span>
+      <span class="chip">🔬 ORCID <b>0000-0003-4328-7171</b></span>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT / CV ============ -->
+  <section id="about">
+    <div class="eyebrow">The résumé</div>
+    <h2 class="title">Structure in noise, from neurons to observability.</h2>
+    <p class="lede">
+      Principal Data Scientist at <b style="color:var(--haze)">Dynatrace</b>, where I
+      work on time-series intelligence at scale. Before that: T-Systems, the Leibniz
+      Institute for Neurobiology (LIN Magdeburg), the German Center for
+      Neurodegenerative Diseases (DZNE Bonn), and a PhD in scientific computing at
+      Uppsala University. My through-line is the same everywhere — pull interpretable
+      structure out of high-dimensional, noisy signals.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/pavol-bauer/" target="_blank" rel="noopener">View full CV & experience →</a>
+    </div>
+  </section>
+
+  <!-- ============ PINNED PROJECTS ============ -->
+  <section id="work">
+    <div class="eyebrow">Pinned on GitHub</div>
+    <h2 class="title">Research code &amp; open source.</h2>
+    <p class="lede">A few repositories I keep coming back to — from animal-behavior
+      embedding to stochastic simulation on unstructured meshes.</p>
+
+    <div class="grid proj">
+      <a class="card reveal" href="https://github.com/LINCellularNeuroscience/VAME" target="_blank" rel="noopener">
+        <div class="row1"><h3>VAME</h3><span class="stars">★ 201</span></div>
+        <p>Variational Animal Motion Embedding — a toolbox for embedding and
+           clustering animal-behavior time series into discrete motifs.</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Deep Learning</span><span class="tag">Time Series</span></div>
+        <span class="go">Open repository →</span>
+      </a>
+
+      <a class="card reveal" href="https://github.com/URDME/urdme" target="_blank" rel="noopener">
+        <div class="row1"><h3>URDME</h3><span class="stars">★ 30</span></div>
+        <p>Stochastic reaction–diffusion simulation on unstructured meshes — a
+           framework for spatial stochastic modeling in systems biology.</p>
+        <div class="tags"><span class="tag">MATLAB</span><span class="tag">Simulation</span><span class="tag">PDE/SDE</span></div>
+        <span class="go">Open repository →</span>
+      </a>
+
+      <a class="card reveal" href="https://github.com/pavolbauer/nsga2" target="_blank" rel="noopener">
+        <div class="row1"><h3>nsga2</h3><span class="stars">★ 3</span></div>
+        <p>A clean implementation of the Non-dominated Sorting Genetic Algorithm II
+           (NSGA-II) for multi-objective optimization.</p>
+        <div class="tags"><span class="tag">MATLAB</span><span class="tag">Optimization</span></div>
+        <span class="go">Open repository →</span>
+      </a>
+
+      <a class="card reveal" href="https://github.com/pavolbauer/ix_kubeflow_tutorial" target="_blank" rel="noopener">
+        <div class="row1"><h3>ix_kubeflow_tutorial</h3></div>
+        <p>Companion code for my iX magazine tutorial on Kubeflow — building
+           reproducible ML pipelines on Kubernetes.</p>
+        <div class="tags"><span class="tag">Jupyter</span><span class="tag">MLOps</span><span class="tag">Kubeflow</span></div>
+        <span class="go">Open repository →</span>
+      </a>
+
+      <a class="card reveal" href="https://github.com/pavolbauer/lgca" target="_blank" rel="noopener">
+        <div class="row1"><h3>lgca</h3><span class="stars">★ 1</span></div>
+        <p>A MATLAB/CUDA simulation of infectious contacts using a Lattice Gas
+           Cellular Automaton — epidemiology on the GPU.</p>
+        <div class="tags"><span class="tag">CUDA</span><span class="tag">GPU</span><span class="tag">Epidemiology</span></div>
+        <span class="go">Open repository →</span>
+      </a>
+
+      <a class="card reveal" href="https://github.com/pavolbauer" target="_blank" rel="noopener">
+        <div class="row1"><h3>More on GitHub</h3></div>
+        <p>29 repositories in total — plus a few Arctic Code Vault contributions.
+           Come dig around.</p>
+        <div class="tags"><span class="tag">@pavolbauer</span></div>
+        <span class="go">See all repos →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ AI PLAYGROUND ============ -->
+  <section id="play">
+    <div class="eyebrow">After hours</div>
+    <h2 class="title">The AI playground.</h2>
+    <p class="lede">Small, playable AI experiments that live right here on this domain —
+      open them on a device with a camera and jump in. No install.</p>
+
+    <div class="grid play">
+      <a class="card pedal reveal" href="https://pavolbauer.github.io/air-hendrix/" target="_blank" rel="noopener">
+        <span class="badge">🔴 Live demo</span>
+        <div class="row1"><h3><span class="emoji">🎸</span>&nbsp; Air Hendrix</h3></div>
+        <p>Point your camera, play air guitar for real. Hand-tracking maps every move
+           onto the E-minor pentatonic — so you literally can't hit a wrong note.
+           Fuzz, wah, delay and reverb included.</p>
+        <div class="tags"><span class="tag">Hand Tracking</span><span class="tag">Web Audio</span><span class="tag">Just Fun</span></div>
+        <span class="go">Plug in →</span>
+      </a>
+
+      <a class="card pedal reveal" href="https://pavolbauer.github.io/city-explorer-game/" target="_blank" rel="noopener">
+        <span class="badge">🎓 Educational</span>
+        <div class="row1"><h3><span class="emoji">🌍</span>&nbsp; City Explorer</h3></div>
+        <p>A geography quiz for 1–4 players: find cities on the map and get scored by
+           how close you land. Pick a continent, a difficulty, satellite or standard
+           view — then race for the shortest distance.</p>
+        <div class="tags"><span class="tag">Geography</span><span class="tag">Multiplayer</span><span class="tag">Learn</span></div>
+        <span class="go">Start exploring →</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="foot-in">
+    <div class="foot-links">
+      <a href="https://www.linkedin.com/in/pavol-bauer/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/pavolbauer" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://twitter.com/pavolbauer" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="https://orcid.org/0000-0003-4328-7171" target="_blank" rel="noopener">ORCID</a>
+    </div>
+    <div class="foot-note">
+      Built in Vienna · <b>plays the sky</b> in his spare time 🎸
+    </div>
+  </div>
+</footer>
+
+<script>
+  // scroll-reveal for cards (respects reduced-motion via CSS: .reveal only animates there)
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);} });
+    },{threshold:.14});
+    els.forEach(function(e){io.observe(e)});
+  })();
+</script>
+</body>
+</html>
