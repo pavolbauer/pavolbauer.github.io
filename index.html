@@ -22,11 +22,11 @@
     --maxw:1080px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:auto}
   body{
     background:var(--ink);color:var(--cream);
     font-family:'Space Grotesk',system-ui,sans-serif;
-    line-height:1.6;overflow-x:hidden;position:relative;
+    line-height:1.6;position:relative;overflow-x:clip;
   }
   /* ambient stage haze */
   body::before{
@@ -70,7 +70,8 @@
 
   /* ---------- layout ---------- */
   main{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
-  section{padding:clamp(56px,9vw,110px) 0;position:relative}
+  section{padding:clamp(56px,9vw,110px) 0;position:relative;scroll-margin-top:90px}
+  #contact{scroll-margin-top:90px}
   .eyebrow{
     font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
     color:var(--fire);display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;
@@ -87,11 +88,11 @@
   /* ---------- hero ---------- */
   .hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;
     padding-top:40px;padding-bottom:60px}
-  .hero .tag{font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;
-    color:var(--haze);margin-bottom:22px}
+  .hero .tag{font-size:15px;font-weight:500;letter-spacing:.3px;text-transform:none;
+    color:var(--haze-dim);margin-bottom:22px}
   .hero h1{
     font-family:'Monoton',cursive;font-weight:400;
-    font-size:clamp(48px,13vw,132px);line-height:.98;letter-spacing:1px;
+    font-size:clamp(38px,9vw,96px);line-height:1;letter-spacing:1px;
     color:var(--haze);text-shadow:0 0 34px rgba(192,132,252,.55);
   }
   .hero h1 .fire{color:var(--fire);text-shadow:0 0 34px rgba(255,109,31,.6)}
